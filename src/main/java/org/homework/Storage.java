@@ -17,7 +17,7 @@ public class Storage {
 
     protected void removeWork(Integer ID) {
         String result="";
-        if(workList.get(ID)==null){
+        if(!workList.containsKey(ID)){
             result = "== 해당 ID 값에 할당된 할 일이 없습니다. ==";
             System.out.println(result);
         }else {
@@ -27,7 +27,7 @@ public class Storage {
 
     protected String searchWork(Integer ID) {
         String result="";
-        if(workList.get(ID)==null) {
+        if(!workList.containsKey(ID)) {
             result = "== 해당 ID 값에 할당된 할 일이 없습니다. ==";
         }else {
             result = workList.get(ID);

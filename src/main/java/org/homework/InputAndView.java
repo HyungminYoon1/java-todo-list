@@ -48,12 +48,13 @@ public class InputAndView {
     private void show_select_1() {
         System.out.println("----------------------------------");
         System.out.print("할 일을 추가하시겠습니까? (Y/N) >> ");
-        String YN_select = scanner.nextLine();
-        if(YN_select.equals("y") || YN_select.equals("Y")){
+        String YN_select =  scanner.nextLine();
+        ;
+        if(YN_select.equalsIgnoreCase("y")){
             System.out.print("할 일을 입력해주세요 >> ");
             String work = scanner.nextLine();
             storage.addWork(work);
-        }else if (YN_select.equals("n") || YN_select.equals("N")) {
+        }else if (YN_select.equalsIgnoreCase("n")) {
             show_options();
         }else{
             System.out.println("잘못된 입력입니다. Y 또는 N 으로 답변해주세요.");
@@ -65,7 +66,7 @@ public class InputAndView {
         System.out.println("----------------------------------");
         System.out.print("할 일을 삭제하시겠습니까? (Y/N) >> ");
         String YN_select = scanner.nextLine();
-        if(YN_select.equals("y") || YN_select.equals("Y")){
+        if(YN_select.equalsIgnoreCase("y")){
             if(storage.displayWorksNum()==0) {
                 System.out.println("삭제할 일이 없습니다.");
                 show_options();
@@ -83,7 +84,7 @@ public class InputAndView {
                 }
             }
 
-        }else if (YN_select.equals("n") || YN_select.equals("N")) {
+        }else if (YN_select.equalsIgnoreCase("n")) {
             show_options();
         }else{
             System.out.println("잘못된 입력입니다. Y 또는 N 으로 답변해주세요.");
@@ -95,9 +96,9 @@ public class InputAndView {
         System.out.println("----------------------------------");
         System.out.print("할 일을 조회하시겠습니까? (Y/N) >> ");
         String YN_select = scanner.nextLine();
-        if(YN_select.equals("y") || YN_select.equals("Y")){
+        if(YN_select.equalsIgnoreCase("y")){
             storage.displayAllWorks();
-        }else if (YN_select.equals("n") || YN_select.equals("N")) {
+        }else if (YN_select.equalsIgnoreCase("n")) {
             show_options();
         }else{
             System.out.println("잘못된 입력입니다. Y 또는 N 으로 답변해주세요.");
