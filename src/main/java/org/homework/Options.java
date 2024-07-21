@@ -1,11 +1,13 @@
 package org.homework;
 
 public enum Options {
+    RESTART(-1),
     INCORRECT(0),
     ADD_WORK(1),
     REMOVE_WORK(2),
     SEARCH_WORK(3),
-    EXIT(4);
+    COMPLETE_WORK(4),
+    EXIT(5);
 
     private final int number;
 

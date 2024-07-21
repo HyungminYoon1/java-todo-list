@@ -1,3 +1,4 @@
+/*
 package org.homework;
 
 import java.util.HashMap;
@@ -52,3 +53,4 @@ public class Storage {
     }
 
 }
+*/
