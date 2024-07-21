@@ -22,6 +22,7 @@ public class Storage {
             System.out.println(result);
         }else {
             workList.remove(ID);
+            System.out.println("ID " + ID + "에 해당하는 할 일이 삭제되었습니다.");
         }
     }
 
@@ -47,10 +48,7 @@ public class Storage {
     }
 
     protected int displayWorksNum() {
-        int result = 0;
-        result = workList.keySet().size();
-        return result;
+        return workList.keySet().size();
     }
-
 
 }
