@@ -31,7 +31,7 @@ public class TodoController {
                         outputView.reportNoneRemovingTodo();
                         break;
                     }else {
-                        int deleteId = inputView.getTodoId("삭제");
+                        int deleteId = inputView.getTodoId(Actions.DELETE);
                         if(deleteId == Options.RESTART.getNumber() ){
                             outputView.showCancelOption(); // 입력 취소
                             break;
@@ -52,13 +52,13 @@ public class TodoController {
                         break;
                     }else {
                         outputView.reportIncompleteTodo(service.getAllTodos());
-                        int completeId = inputView.getTodoId("완료");
+                        int completeId = inputView.getTodoId(Actions.COMPLETE);
                         if(completeId == Options.RESTART.getNumber() ){
                             outputView.showCancelOption(); // 입력 취소
                             break;
                         }else {
                             int resultNum = service.completeTodoById(completeId);
-                            outputView.reporCompletedResult(completeId, resultNum);
+                            outputView.reportCompletedResult(completeId, resultNum);
                             break;
                         }
                     }

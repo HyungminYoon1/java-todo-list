@@ -28,7 +28,7 @@ public class InputView {
         return scanner.nextLine();
     }
 
-    public int getTodoId(String action) {
+    public int getTodoId(Actions action) {
         System.out.print(action + "할 할 일의 ID를 입력하세요 >> ");
         inputString = scanner.nextLine();
         try{

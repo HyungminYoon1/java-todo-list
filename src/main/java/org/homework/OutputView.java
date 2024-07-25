@@ -74,7 +74,7 @@ public class OutputView {
         }
     }
 
-    public void reporCompletedResult(int completeId, int resultNum) {
+    public void reportCompletedResult(int completeId, int resultNum) {
         if(resultNum == 1){
             System.out.println("id: "+completeId+" 완료처리 실시");
         }else if (resultNum == 0) {
