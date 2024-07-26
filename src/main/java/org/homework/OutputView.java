@@ -13,31 +13,37 @@ public class OutputView {
     }
 
 
-
-    public void displayTodos(Map<Integer, Todo> todos) {
+    public void displayAllTodos(Map<Integer, Todo> todos) {
         if (todos.isEmpty()) {
-            System.out.println("할 일 목록이 비어 있습니다.");
+            System.out.println("※ 할 일 목록이 비어 있습니다.");
         } else {
+            System.out.printf("%-8s %-20s %-20s %-10s%n", "ID", "내용", "상태", "마감일");
+            System.out.println("-----------------------------------------------------------------");
+
             for (Todo todo : todos.values()) {
-                System.out.println(todo);
+                displayTodo(todo);
             }
         }
     }
 
     public void reportCompleteAddingTodo(Todo todo) {
-        System.out.println("할 일 추가 => "+"Id: " + todo.getId() + ", 내용: "+ todo.getDescription() +", 완료여부: "+ (todo.isCompleted() ? "[완료]" : "[미완료]"));
+        System.out.println("※ 할 일 추가 => "+"Id: " + todo.getId() + ", 내용: "+ todo.getDescription() +", 완료여부: "+ (todo.isCompleted() ? "[완료]" : "[미완료]") + ", 마감일: " + todo.getDueDate());
     }
 
     public void reportCompleteRemovingTodo(int id, int resultNum) {
-        System.out.println("삭제 완료 => Id: " + id );
+        System.out.println("※ 삭제 완료 => Id: " + id );
     }
 
     public void reportNoneRemovingTodo() {
-        System.out.println("삭제할 일이 없습니다.");
+        System.out.println("※ 삭제할 일이 없습니다.");
     }
 
     public void reportNoneTodo() {
-        System.out.println("할 일 목록이 비어 있습니다.");
+        System.out.println("※ 할 일 목록이 비어 있습니다.");
+    }
+
+    public void reportEmptyTodos() {
+        System.out.println("※ 할 일 목록이 비어 있습니다.");
     }
 
     public void reportIncompleteTodo(Map<Integer, Todo> todos) {
@@ -47,14 +53,19 @@ public class OutputView {
                 notCompleteCount++;
         }
         if(notCompleteCount==0) {
-            System.out.println("완료되지 않은 일이 없습니다.");
+            System.out.println("※ 완료되지 않은 일이 없습니다.");
         }else {
-            System.out.println("완료되지 않은 일이 "+notCompleteCount+"건 있습니다.");
+            System.out.println("※ 완료되지 않은 일이 "+notCompleteCount+"건 있습니다.");
         }
     }
 
-    public void showIncorrectOption() {
-        System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
+
+    public void showIncorrectInput() {
+        System.out.println("$ 잘못된 입력입니다. 다시 시도해주세요.");
+    }
+
+    public void showUnknownError() {
+        System.out.println("$ 알 수 없는 오류");
     }
 
     public void showRestartOption() {
@@ -68,19 +79,37 @@ public class OutputView {
         if(resultNum == 1){
             System.out.println("id: "+id+" 삭제 완료");
         }else if (resultNum == 0) {
-            System.out.println("입력한 아이디 값에 할당된 일이 존재하지 않습니다.");
+            System.out.println("※ 입력한 아이디 값에 할당된 일이 존재하지 않습니다.");
         }else {
-            System.out.println("알 수 없는 오류");
+            showUnknownError();
         }
     }
 
     public void reportCompletedResult(int completeId, int resultNum) {
         if(resultNum == 1){
-            System.out.println("id: "+completeId+" 완료처리 실시");
+            System.out.println("※ id: "+completeId+" - 완료처리 실시");
         }else if (resultNum == 0) {
-            System.out.println("입력한 아이디 값에 할당된 일이 존재하지 않습니다.");
+            System.out.println("※ 입력한 아이디 값에 할당된 일이 존재하지 않습니다.");
         }else {
-            System.out.println("알 수 없는 오류");
+            showUnknownError();
         }
+    }
+
+    public void reportInputResult(String inputString) {
+        System.out.println("*입력: "+inputString);
+    }
+
+    public void displayTodo(Todo todo) {
+        String formattedTodo = String.format("%-8d %-20s %-20s %-10s",
+                todo.getId(),
+                todo.getDescription(),
+                (todo.isCompleted() ? "완료" : "미완료"),
+                todo.getDueDate()
+        );
+        System.out.println(formattedTodo);
+    }
+
+    public void displayTodosWithinDueDate(int dueDateNum) {
+        System.out.println();
     }
 }

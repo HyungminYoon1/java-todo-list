@@ -1,15 +1,20 @@
 package org.homework;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class InputView {
     private final Scanner scanner = new Scanner(System.in);
     private static String inputString;
     private static Options selectedOption;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
     public int getOption() {
         System.out.println("--------- SELECT OPTIONS -----------");
-        System.out.println("옵션을 선택하세요: 1. 추가, 2. 단건삭제, 3. 전체조회, 4. 완료처리, 5. 종료  [입력취소: -1]");
+        System.out.println("옵션을 선택하세요: 1. 추가, 2. 단건삭제, 3. 조회, 4. 완료처리, 5. 종료  [입력취소: -1]");
         System.out.print("숫자(1~5) 입력 >> ");
         inputString = scanner.nextLine();
 
@@ -37,5 +42,57 @@ public class InputView {
             selectedOption = Options.INCORRECT;
             return selectedOption.getNumber();
         }
+    }
+
+    public String getTodoDueDate() {
+        System.out.println("마감일을 입력하세요. (예) 2024-10-30   [마감일이 없을 경우: 엔터 / 입력취소: -1]");
+        boolean running = true;
+        while(running){
+            System.out.print("마감일 입력 >> ");
+            inputString = scanner.nextLine();
+            if(inputString.equals(String.valueOf(Options.INPUT_CANCEL.getNumber()))){ // 입력취소
+                inputString = Actions.CANCEL.getAction();
+                running = false;
+            }
+            else if(inputString.isBlank()){
+                inputString = Actions.NONE_DUEDATE.getAction(); // 마감일 없음
+                running = false;
+            }else {
+                try {
+                    LocalDate.parse(inputString, DATE_FORMATTER); // 문자열을 LocalDate로 변환 시도
+                    running = false;
+                } catch (DateTimeParseException e) { // 잘못된 날짜 입력
+                    System.out.println("$ 잘못된 입력. 다시 입력해주세요.");
+                }
+            }
+        }
+        return inputString;
+    }
+
+
+    public String askDueDate() {
+        System.out.println("오늘로부터 마감일까지 남은 일수를 입력하세요.(0~N) [마감일 무관 전체출력: 엔터  / 입력취소: -1]");
+        Boolean running = true;
+        while(running) {
+            System.out.println("마감일까지 남은 일수 >> ");
+            inputString = scanner.nextLine();
+            if(inputString.equals(String.valueOf(Options.INPUT_CANCEL.getNumber()))){ // 입력취소
+                inputString = Actions.CANCEL.getAction();
+                running = false;
+                return inputString;
+            }else if(inputString.isBlank()){
+                inputString = Actions.ALL.getAction(); // 마감일 무관 전체 출력
+                running = false;
+            }else {
+                try {
+                    Integer.parseInt(inputString); // 문자열을 integer로 변환 시도
+                    running = false;
+                } catch (DateTimeParseException e) { // 잘못된 입력
+                    System.out.println("$ 잘못된 입력. 다시 입력해주세요.");
+                }
+            }
+        }
+        return inputString;
+
     }
 }

@@ -1,7 +1,7 @@
 package org.homework;
 
 public enum Options {
-    RESTART(-1),
+    INPUT_CANCEL(-1),
     INCORRECT(0),
     ADD_WORK(1),
     REMOVE_WORK(2),

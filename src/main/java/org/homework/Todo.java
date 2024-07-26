@@ -4,11 +4,26 @@ public class Todo {
     private int id;
     private String description;
     private boolean isCompleted;
+    private String dueDate;
 
     public Todo(int id, String description) {
         this.id = id;
         this.description = description;
         this.isCompleted = false;
+    }
+
+    public Todo(int id, String description, boolean isCompleted, String dueDate) {
+        this.id = id;
+        this.description = description;
+        this.isCompleted = isCompleted;
+        this.dueDate = dueDate;
+    }
+
+    public Todo(int id, String description, String dueDate) {
+        this.id = id;
+        this.description = description;
+        this.isCompleted = false;
+        this.dueDate = dueDate;
     }
 
     public int getId() {
@@ -22,13 +37,15 @@ public class Todo {
     public boolean isCompleted() {
         return isCompleted;
     }
+    public String getDueDate() {
+        return dueDate;
+    }
 
-    public void complete() {
+
+
+    public void completeTodo() {
         this.isCompleted = true;
     }
 
-    @Override
-    public String toString() {
-        return "ID: " + id + ", Description: " + description + ", Status: " + (isCompleted ? "[완료]" : "[미완료]");
-    }
+
 }
