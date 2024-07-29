@@ -2,6 +2,7 @@ package org.homework;
 
 public enum Actions {
     COMPLETE("완료"),
+    INCOMPLETE("미완료"),
     DELETE("삭제"),
     SEARCH("조회"),
     MODIFY("수정"),
@@ -23,6 +24,6 @@ public enum Actions {
 
     @Override
     public String toString() {
-        return action;
+        return String.valueOf(action);
     }
 }

@@ -5,9 +5,10 @@ public enum Options {
     INCORRECT(0),
     ADD_WORK(1),
     REMOVE_WORK(2),
-    SEARCH_WORK(3),
-    COMPLETE_WORK(4),
-    EXIT(5);
+    DISPLAY_WORK(3),
+    KEYWORD_SEARCH(4),
+    COMPLETE_WORK(5),
+    EXIT(6);
 
     private final int number;
 

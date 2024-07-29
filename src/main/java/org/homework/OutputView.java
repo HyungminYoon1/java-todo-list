@@ -1,5 +1,6 @@
 package org.homework;
 
+import java.util.List;
 import java.util.Map;
 
 public class OutputView {
@@ -23,11 +24,12 @@ public class OutputView {
             for (Todo todo : todos.values()) {
                 displayTodo(todo);
             }
+            System.out.println("------------------------------END--------------------------------");
         }
     }
 
     public void reportCompleteAddingTodo(Todo todo) {
-        System.out.println("※ 할 일 추가 => "+"Id: " + todo.getId() + ", 내용: "+ todo.getDescription() +", 완료여부: "+ (todo.isCompleted() ? "[완료]" : "[미완료]") + ", 마감일: " + todo.getDueDate());
+        System.out.println("※ 할 일 추가 => "+"Id: " + todo.getId() + ", 내용: "+ todo.getDescription() +", 완료여부: "+ (todo.isCompleted() ? Actions.COMPLETE : Actions.INCOMPLETE) + ", 마감일: " + todo.getDueDate());
     }
 
     public void reportCompleteRemovingTodo(int id, int resultNum) {
@@ -103,13 +105,49 @@ public class OutputView {
         String formattedTodo = String.format("%-8d %-20s %-20s %-10s",
                 todo.getId(),
                 todo.getDescription(),
-                (todo.isCompleted() ? "완료" : "미완료"),
+                (todo.isCompleted() ? Actions.COMPLETE : Actions.INCOMPLETE),
                 todo.getDueDate()
         );
         System.out.println(formattedTodo);
     }
 
-    public void displayTodosWithinDueDate(int dueDateNum) {
+    public void displayTodosWithinDueDate(List<Todo> filteredAndSortedTodos, int dDayNum) {
+
+        if (filteredAndSortedTodos.isEmpty()) {
+            System.out.println("※ 지정된 기간 내에 마감되는 할 일이 없습니다.");
+        } else {
+            System.out.printf("%-8s %-20s %-20s %-10s%n", "ID", "내용", "상태", "마감일");
+            System.out.println("-----------------------------------------------------------------");
+
+            for (Todo todo : filteredAndSortedTodos) {
+                System.out.printf("%-8d %-20s %-20s %-10s%n",
+                        todo.getId(),
+                        todo.getDescription(),
+                        (todo.isCompleted() ? Actions.COMPLETE : Actions.INCOMPLETE),
+                        todo.getDueDate());
+            }
+            System.out.println("------------------------------END--------------------------------");
+        }
+
+        System.out.println();
+    }
+
+    public void displayTodosWithSearchWord(List<Todo> todos) {
+
+        if (todos.isEmpty()) {
+            System.out.println("※ 검색 결과가 없습니다.");
+        } else {
+            System.out.printf("%-8s %-20s %-20s %-10s%n", "ID", "내용", "상태", "마감일");
+            System.out.println("-----------------------------------------------------------------");
+
+            for (Todo todo : todos) {
+                System.out.printf("%-8d %-20s %-20s %-10s%n",
+                        todo.getId(),
+                        todo.getDescription(),
+                        (todo.isCompleted() ? Actions.COMPLETE : Actions.INCOMPLETE),
+                        todo.getDueDate());
+            }
+        }
         System.out.println();
     }
 }

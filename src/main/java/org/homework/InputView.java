@@ -14,7 +14,7 @@ public class InputView {
 
     public int getOption() {
         System.out.println("--------- SELECT OPTIONS -----------");
-        System.out.println("옵션을 선택하세요: 1. 추가, 2. 단건삭제, 3. 조회, 4. 완료처리, 5. 종료  [입력취소: -1]");
+        System.out.println("옵션을 선택하세요: 1. 추가, 2. 단건삭제, 3. 조회, 4. 검색, 5. 완료처리, 6. 종료  [입력취소: -1]");
         System.out.print("숫자(1~5) 입력 >> ");
         inputString = scanner.nextLine();
 
@@ -70,29 +70,39 @@ public class InputView {
     }
 
 
-    public String askDueDate() {
+    public String askDDay() {
         System.out.println("오늘로부터 마감일까지 남은 일수를 입력하세요.(0~N) [마감일 무관 전체출력: 엔터  / 입력취소: -1]");
-        Boolean running = true;
-        while(running) {
-            System.out.println("마감일까지 남은 일수 >> ");
+        while(true) {
+            System.out.print("마감일까지 남은 일수 >> ");
             inputString = scanner.nextLine();
             if(inputString.equals(String.valueOf(Options.INPUT_CANCEL.getNumber()))){ // 입력취소
-                inputString = Actions.CANCEL.getAction();
-                running = false;
-                return inputString;
+                return Actions.CANCEL.getAction(); // 루프 종료
             }else if(inputString.isBlank()){
                 inputString = Actions.ALL.getAction(); // 마감일 무관 전체 출력
-                running = false;
+                return inputString; // 루프 종료
             }else {
-                try {
-                    Integer.parseInt(inputString); // 문자열을 integer로 변환 시도
-                    running = false;
-                } catch (DateTimeParseException e) { // 잘못된 입력
+                try{
+                    int dDay = Integer.parseInt(inputString); // 문자열을 integer 변환 시도
+                    if(dDay <= -2) {
+                        System.out.println("$ 잘못된 입력. 다시 입력해주세요.");
+                    }else {
+                        return inputString; // 루프 종료
+                    }
+                }catch (NumberFormatException e){
                     System.out.println("$ 잘못된 입력. 다시 입력해주세요.");
                 }
             }
         }
-        return inputString;
 
+    }
+
+    public String askKeyword() {
+        System.out.print("검색할 단어를 입력하세요. [입력취소: 엔터] >> ");
+        inputString = scanner.nextLine();
+        if(inputString.isBlank()) {
+            return "";
+        } else{
+            return inputString;
+        }
     }
 }

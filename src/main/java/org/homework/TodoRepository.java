@@ -1,10 +1,15 @@
 package org.homework;
 
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static org.homework.Utils.daysBetweenTodayAnd;
+import static org.homework.Utils.daysBetweenTodayAndDueDate;
 
 
 public class TodoRepository {
@@ -39,13 +44,38 @@ public class TodoRepository {
         return todoMap;
     } // 전체 Todo 불러오기
 
+
     public Map<Integer, Todo> getAllTodosWithinDDay(int dDay) {
         Map<Integer, Todo> resultTodoMap = new HashMap<>();
-        for(Todo todo : todoMap.values()){
-            if(daysBetweenTodayAnd(todo.getDueDate()) <= dDay) {
+        for (Todo todo : todoMap.values()) {
+            if (daysBetweenTodayAndDueDate(todo.getDueDate()) <= dDay) {
                 resultTodoMap.put(todo.getId(), todo);
             }
         }
         return resultTodoMap;
+    }
+
+    public List<Todo> filterAndSortTodos (int dDay) {
+        LocalDate today = LocalDate.now();
+        Map<Integer, Todo> filteredTodos = getAllTodosWithinDDay(dDay);
+        List<Todo> sortedTodos = filteredTodos.values().stream()
+                .filter(todo -> {
+                    LocalDate dueDate = LocalDate.parse(todo.getDueDate());
+                    long daysBetween = ChronoUnit.DAYS.between(today, dueDate);
+                    return daysBetween >= 0 && daysBetween <= dDay;
+                })
+                .sorted(Comparator.comparing(todo -> LocalDate.parse(todo.getDueDate())))
+                .collect(Collectors.toList());
+
+        return sortedTodos;
+    }
+
+    public List<Todo> searchTodosByKeyword(String keyword) {
+        Map<Integer, Todo> todos = getAllTodos();
+        List<Todo> filteredAndSortedTodos = todos.values().stream()
+                .filter(todo -> todo.getDescription().contains(keyword))
+                .sorted(Comparator.comparing(todo -> LocalDate.parse(todo.getDueDate())))
+                .collect(Collectors.toList());
+        return filteredAndSortedTodos;
     }
 }

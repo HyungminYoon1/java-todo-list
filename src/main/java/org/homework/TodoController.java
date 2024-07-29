@@ -1,5 +1,7 @@
 package org.homework;
 
+import java.util.List;
+
 public class TodoController {
     private final TodoService service = new TodoService();
     private final InputView inputView = new InputView();
@@ -47,25 +49,44 @@ public class TodoController {
                     }
                     break;
 
-                case SEARCH_WORK:
+                case DISPLAY_WORK:
                     if(service.getAllTodos().isEmpty()){
                         outputView.reportEmptyTodos();
                         break;
                     }
-                    String dueDate = inputView.askDueDate();
-                    outputView.reportInputResult(dueDate);
-                    if(dueDate.equals(Actions.ALL.getAction())) {
+                    String dDay = inputView.askDDay();
+                    outputView.reportInputResult(dDay);
+                    if(dDay.equals(Actions.CANCEL.toString())) break;
+                    if(dDay.equals(Actions.ALL.getAction())) {
                         outputView.displayAllTodos(service.getAllTodos()); // 모든 리스트 출력
                     }else{
                         try{
-                            int dueDateNum = Integer.parseInt(dueDate);
-                            outputView.displayTodosWithinDueDate(dueDateNum);
+                            int dDayNum = Integer.parseInt(dDay);
+                            if(dDayNum == Options.INPUT_CANCEL.getNumber()) break;
+                            List<Todo> filteredAndSortedTodos = service.getFilterAndSortTodos(dDayNum);
+                            outputView.displayTodosWithinDueDate(filteredAndSortedTodos, dDayNum);
                         } catch (NumberFormatException e) {
                             outputView.showUnknownError();
                         }
                     }
-
                     break;
+
+                case KEYWORD_SEARCH:
+                    if(service.getAllTodos().isEmpty()) { // 등록된 일이 없을 경우
+                        outputView.reportNoneTodo();
+                        break;
+                    }else {
+                        String keyword = inputView.askKeyword();
+                        outputView.reportInputResult(keyword);
+                        if(keyword.isEmpty()){
+                            outputView.showCancelOption(); // 입력취소
+                            break;
+                        }else{
+                            List<Todo> searchResult = service.searchTodosByKeyword(keyword);
+                            outputView.displayTodosWithSearchWord(searchResult);
+                        }
+                        break;
+                    }
 
                 case COMPLETE_WORK:
                     if(service.getAllTodos().isEmpty()) { // 등록된 일이 없을 경우
