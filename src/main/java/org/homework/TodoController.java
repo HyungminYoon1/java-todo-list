@@ -55,8 +55,8 @@ public class TodoController {
                         break;
                     }
                     String dDay = inputView.askDDay();
-                    outputView.reportInputResult(dDay);
                     if(dDay.equals(Actions.CANCEL.toString())) break;
+                    else outputView.reportInputResult(dDay);
                     if(dDay.equals(Actions.ALL.getAction())) {
                         outputView.displayAllTodos(service.getAllTodos()); // 모든 리스트 출력
                     }else{
@@ -78,7 +78,7 @@ public class TodoController {
                     }else {
                         String keyword = inputView.askKeyword();
                         outputView.reportInputResult(keyword);
-                        if(keyword.isEmpty()){
+                        if(keyword.isBlank()){
                             outputView.showCancelOption(); // 입력취소
                             break;
                         }else{

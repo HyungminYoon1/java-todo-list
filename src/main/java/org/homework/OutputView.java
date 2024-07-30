@@ -16,7 +16,7 @@ public class OutputView {
 
     public void displayAllTodos(Map<Integer, Todo> todos) {
         if (todos.isEmpty()) {
-            System.out.println("※ 할 일 목록이 비어 있습니다.");
+            System.out.println(Messages.EMPTY_TODO_LIST.getMessage());
         } else {
             System.out.printf("%-8s %-20s %-20s %-10s%n", "ID", "내용", "상태", "마감일");
             System.out.println("-----------------------------------------------------------------");
@@ -41,18 +41,17 @@ public class OutputView {
     }
 
     public void reportNoneTodo() {
-        System.out.println("※ 할 일 목록이 비어 있습니다.");
+        System.out.println(Messages.EMPTY_TODO_LIST.getMessage());
     }
 
     public void reportEmptyTodos() {
-        System.out.println("※ 할 일 목록이 비어 있습니다.");
+        System.out.println(Messages.EMPTY_TODO_LIST.getMessage());
     }
 
     public void reportIncompleteTodo(Map<Integer, Todo> todos) {
         int notCompleteCount = 0;
         for (Todo todo : todos.values()) {
-            if(!todo.isCompleted())
-                notCompleteCount++;
+            if(!todo.isCompleted()) notCompleteCount++;
         }
         if(notCompleteCount==0) {
             System.out.println("※ 완료되지 않은 일이 없습니다.");
@@ -63,18 +62,18 @@ public class OutputView {
 
 
     public void showIncorrectInput() {
-        System.out.println("$ 잘못된 입력입니다. 다시 시도해주세요.");
+        System.out.println(Messages.WRONG_INPUT_TRY_AGAIN.getMessage());
     }
 
     public void showUnknownError() {
-        System.out.println("$ 알 수 없는 오류");
+        System.out.println(Messages.UNKNOWN_ERROR.getMessage());
     }
 
     public void showRestartOption() {
         System.out.println("리셋");
     }
     public void showCancelOption() {
-        System.out.println("입력 취소");
+        System.out.println(Actions.INPUT_CANCEL.getAction());
     }
 
     public void reportDeleteResult(int id, int resultNum) {
@@ -102,13 +101,7 @@ public class OutputView {
     }
 
     public void displayTodo(Todo todo) {
-        String formattedTodo = String.format("%-8d %-20s %-20s %-10s",
-                todo.getId(),
-                todo.getDescription(),
-                (todo.isCompleted() ? Actions.COMPLETE : Actions.INCOMPLETE),
-                todo.getDueDate()
-        );
-        System.out.println(formattedTodo);
+        System.out.println(todo);
     }
 
     public void displayTodosWithinDueDate(List<Todo> filteredAndSortedTodos, int dDayNum) {
@@ -120,11 +113,7 @@ public class OutputView {
             System.out.println("-----------------------------------------------------------------");
 
             for (Todo todo : filteredAndSortedTodos) {
-                System.out.printf("%-8d %-20s %-20s %-10s%n",
-                        todo.getId(),
-                        todo.getDescription(),
-                        (todo.isCompleted() ? Actions.COMPLETE : Actions.INCOMPLETE),
-                        todo.getDueDate());
+                System.out.println(todo.toString());
             }
             System.out.println("------------------------------END--------------------------------");
         }
@@ -141,11 +130,7 @@ public class OutputView {
             System.out.println("-----------------------------------------------------------------");
 
             for (Todo todo : todos) {
-                System.out.printf("%-8d %-20s %-20s %-10s%n",
-                        todo.getId(),
-                        todo.getDescription(),
-                        (todo.isCompleted() ? Actions.COMPLETE : Actions.INCOMPLETE),
-                        todo.getDueDate());
+                System.out.println(todo.toString());
             }
         }
         System.out.println();

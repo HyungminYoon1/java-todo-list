@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TodoService {
@@ -15,17 +16,7 @@ public class TodoService {
     }
 
     public int removeTodoById(int id) {
-        Todo todo = repository.findTodoById(id);
-        if (todo != null) {
-            repository.removeTodoById(id);
-            return 1;
-        }else {
-            return 0;
-        }
-    }
-
-    public Todo findTodoById(int id) {
-        return repository.findTodoById(id);
+        return repository.removeTodoById(id);
     }
 
     public Map<Integer, Todo> getAllTodos() {
@@ -37,13 +28,12 @@ public class TodoService {
     }
 
     public int completeTodoById(int id) {
-        Todo todo = repository.findTodoById(id);
-        if (todo != null) {
-            todo.completeTodo();
-            return 1;
-        }else {
-            return 0;
-        }
+        return repository.findTodoById(id)
+                .map(todo -> {
+                    todo.completeTodo();
+                    return 1;
+                })
+                .orElse(0);
     }
 
     public int getIncompleteTodoCount() {

@@ -7,7 +7,8 @@ public enum Actions {
     SEARCH("조회"),
     MODIFY("수정"),
     CANCEL("취소"),
-    NONE_DUEDATE("마감일없음"),
+    INPUT_CANCEL("입력 취소"),
+    NONE_DUE_DATE("마감일없음"),
     BACK("뒤로가기"),
     ESCAPE("탈출"),
     ALL("전체");

@@ -48,4 +48,16 @@ public class Todo {
     }
 
 
+    public boolean containsKeyword(String keyword) {
+        return this.toString().contains(keyword);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%-8d %-20s %-20s %-10s",
+                id,
+                description,
+                (isCompleted ? Actions.COMPLETE.getAction() : Actions.INCOMPLETE.getAction()),
+                dueDate);
+    }
 }
