@@ -41,8 +41,6 @@ public class Todo {
         return dueDate;
     }
 
-
-
     public void completeTodo() {
         this.isCompleted = true;
     }

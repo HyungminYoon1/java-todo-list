@@ -1,12 +1,8 @@
 package org.homework;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class TodoService {
     private final TodoRepository repository = new TodoRepository();
@@ -15,11 +11,11 @@ public class TodoService {
         return repository.addTodoWithDueDate(description, dueDate);
     }
 
-    public int removeTodoById(int id) {
+    public Optional<Todo> removeTodoById(int id) {
         return repository.removeTodoById(id);
     }
 
-    public Map<Integer, Todo> getAllTodos() {
+    public Optional<Map<Integer, Todo>> getAllTodos() {
         return repository.getAllTodos();
     }
 
@@ -27,23 +23,20 @@ public class TodoService {
         return repository.getAllTodosWithinDDay(dDay);
     }
 
-    public int completeTodoById(int id) {
+    public Optional<Todo> completeTodoById(int id) {
         return repository.findTodoById(id)
                 .map(todo -> {
                     todo.completeTodo();
-                    return 1;
-                })
-                .orElse(0);
+                    return todo;
+                });
     }
 
     public int getIncompleteTodoCount() {
-        Map<Integer, Todo> todos = repository.getAllTodos();
-        int notCompleteCount = 0;
-        for (Todo todo : todos.values()) {
-            if(!todo.isCompleted())
-                notCompleteCount++;
-        }
-        return notCompleteCount;
+        return repository.getAllTodos()
+                .map(todos -> (int) todos.values().stream()
+                        .filter(todo -> !todo.isCompleted())
+                        .count())
+                .orElse(0);
     }
 
     public List<Todo> getFilterAndSortTodos(int dDay) {

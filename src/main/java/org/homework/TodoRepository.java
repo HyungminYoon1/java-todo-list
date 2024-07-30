@@ -33,51 +33,52 @@ public class TodoRepository {
         return Optional.ofNullable(todoMap.get(id));
     } // 단건 Todo 불러오기
 
-    public int removeTodoById(int id) {
-        Todo removedTodo = todoMap.remove(id);
-        return removedTodo != null ? 1 : 0;
+
+    public Optional<Todo> removeTodoById(int id) {
+        return Optional.ofNullable(todoMap.remove(id));
     } // Todo 삭제
 
-    public Map<Integer, Todo> getAllTodos() {
-        return todoMap;
+    public Optional<Map<Integer, Todo>> getAllTodos() {
+        return Optional.of(todoMap);
     } // 전체 Todo 불러오기
 
 
     public Map<Integer, Todo> getAllTodosWithinDDay(int dDay) {
         Map<Integer, Todo> resultTodoMap = new HashMap<>();
         for (Todo todo : todoMap.values()) {
-            if (isDueDateWithinDays(todo.getDueDate(), dDay)) {
+            if (isDueDateWithinDays(Optional.ofNullable(todo.getDueDate()), dDay)) {
                 resultTodoMap.put(todo.getId(), todo);
             }
         }
         return resultTodoMap;
     }
 
-    public boolean isDueDateWithinDays(String dueDateString, int days) {
-        if (dueDateString == null || dueDateString.isEmpty()) {
-            return false;
-        }
-        try {
-            LocalDate dueDate = LocalDate.parse(dueDateString);
-            LocalDate today = LocalDate.now();
-            long daysBetween = ChronoUnit.DAYS.between(today, dueDate);
-            return daysBetween >= 0 && daysBetween <= days;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
+    public boolean isDueDateWithinDays(Optional<String> dueDateString, int days) {
+        return dueDateString
+                .filter(date -> !date.isEmpty())
+                .map(date -> {
+                    try {
+                        LocalDate dueDate = LocalDate.parse(date);
+                        LocalDate today = LocalDate.now();
+                        long daysBetween = ChronoUnit.DAYS.between(today, dueDate);
+                        return daysBetween >= 0 && daysBetween <= days;
+                    } catch (DateTimeParseException e) {
+                        return false;
+                    }
+                })
+                .orElse(false);
     }
 
     public List<Todo> filterAndSortTodos (int dDay) {
         Map<Integer, Todo> filteredTodos = getAllTodosWithinDDay(dDay);
         return filteredTodos.values().stream()
-                .filter(todo -> isDueDateWithinDays(todo.getDueDate(), dDay))
+                .filter(todo -> isDueDateWithinDays(Optional.ofNullable(todo.getDueDate()), dDay))
                 .sorted(Comparator.comparing(todo -> LocalDate.parse(todo.getDueDate())))
                 .collect(Collectors.toList());
     }
 
     public List<Todo> searchTodosByKeyword(String keyword) {
-        Map<Integer, Todo> todos = getAllTodos();
-        return todos.values().stream()
+        return todoMap.values().stream()
                 .filter(todo -> todo.containsKeyword(keyword))
                 .sorted(Comparator.comparing(todo -> LocalDate.parse(todo.getDueDate())))
                 .collect(Collectors.toList());

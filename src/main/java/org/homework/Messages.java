@@ -2,8 +2,9 @@ package org.homework;
 
 public enum Messages {
     WRONG_INPUT_TRY_AGAIN("$ 잘못된 입력. 다시 시도해주세요."),
-    UNKNOWN_ERROR("$ 알 수 없는 오류"),
-    EMPTY_TODO_LIST("※ 할 일 목록이 비어 있습니다.");
+    UNKNOWN_ERROR("$ 알 수 없는 오류!"),
+    EMPTY_TODO_LIST("※ 할 일 목록이 비어 있습니다."),
+    EMPTY_INPUT("※ 입력값이 비어 있습니다.");
 
 
     private final String message;
