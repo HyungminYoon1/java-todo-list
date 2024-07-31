@@ -12,7 +12,6 @@ public enum Options {
 
     private final int number;
 
-
     Options(int number) {
         this.number = number;
     }
@@ -29,5 +28,4 @@ public enum Options {
         }
         return INCORRECT;
     }
-
 }

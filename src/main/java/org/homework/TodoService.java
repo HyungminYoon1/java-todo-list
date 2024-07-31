@@ -14,29 +14,12 @@ public class TodoService {
     public Optional<Todo> removeTodoById(int id) {
         return repository.removeTodoById(id);
     }
+    public Todo getTodoById(int id) {
+        return repository.getAllTodos().get(id);
+    }
 
-    public Optional<Map<Integer, Todo>> getAllTodos() {
+    public Map<Integer, Todo> getAllTodos() {
         return repository.getAllTodos();
-    }
-
-    public Map<Integer, Todo> getAllTodosWithinDDay(int dDay) {
-        return repository.getAllTodosWithinDDay(dDay);
-    }
-
-    public Optional<Todo> completeTodoById(int id) {
-        return repository.findTodoById(id)
-                .map(todo -> {
-                    todo.completeTodo();
-                    return todo;
-                });
-    }
-
-    public int getIncompleteTodoCount() {
-        return repository.getAllTodos()
-                .map(todos -> (int) todos.values().stream()
-                        .filter(todo -> !todo.isCompleted())
-                        .count())
-                .orElse(0);
     }
 
     public List<Todo> getFilterAndSortTodos(int dDay) {
@@ -45,5 +28,9 @@ public class TodoService {
 
     public List<Todo> searchTodosByKeyword(String keyword) {
         return repository.searchTodosByKeyword(keyword);
+    }
+
+    public void completeTodoById(int id) {
+        repository.completeTodo(id);
     }
 }

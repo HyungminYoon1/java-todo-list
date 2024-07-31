@@ -1,13 +1,10 @@
 package org.homework;
 
-
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
-
-
 
 public class TodoRepository {
     private final Map<Integer, Todo> todoMap = new HashMap<>();
@@ -15,33 +12,18 @@ public class TodoRepository {
 
 
     public Todo addTodoWithDueDate(String description, String dueDate) { // Todo 생성 및 저장
-        currentId++;
-        Todo newTodo = new Todo(currentId, description, dueDate );
-        saveTodo(newTodo);
+        Todo newTodo = new Todo(currentId++, description, dueDate );
+        todoMap.put(currentId, newTodo);
         return newTodo;
     }
-
-    public void saveTodo(Todo todo) { // Todo 저장
-        todoMap.put(currentId, todo);
-    }
-
-    public int checkTodoMapSize(Map<Integer, Todo> todos) {
-        return todos.keySet().size();
-    }
-
-    public Optional<Todo> findTodoById(int id) {
-        return Optional.ofNullable(todoMap.get(id));
-    } // 단건 Todo 불러오기
-
 
     public Optional<Todo> removeTodoById(int id) {
         return Optional.ofNullable(todoMap.remove(id));
     } // Todo 삭제
 
-    public Optional<Map<Integer, Todo>> getAllTodos() {
-        return Optional.of(todoMap);
+    public Map<Integer, Todo> getAllTodos() {
+        return todoMap;
     } // 전체 Todo 불러오기
-
 
     public Map<Integer, Todo> getAllTodosWithinDDay(int dDay) {
         Map<Integer, Todo> resultTodoMap = new HashMap<>();
@@ -82,5 +64,9 @@ public class TodoRepository {
                 .filter(todo -> todo.containsKeyword(keyword))
                 .sorted(Comparator.comparing(todo -> LocalDate.parse(todo.getDueDate())))
                 .collect(Collectors.toList());
+    }
+
+    public void completeTodo(int id) {
+        getAllTodos().get(id).completeTodo();
     }
 }

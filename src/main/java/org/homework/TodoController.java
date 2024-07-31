@@ -1,7 +1,7 @@
 package org.homework;
 
 import java.util.List;
-import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class TodoController {
@@ -11,118 +11,84 @@ public class TodoController {
 
     public void run() {
         boolean running = true;
-        outputView.showIntro();
-
+        outputView.displayProgramIntro();
         while (running) {
+            Options option = Options.fromInput(inputView.getOption());
             try {
-                Options option = Options.fromInput(inputView.getOption());
                 switch (option) {
                     case INPUT_CANCEL:
                         outputView.showRestartOption();
                         break;
                     case ADD_WORK:
-                        handleAddWork();
+                        addTodo();
                         break;
                     case REMOVE_WORK:
-                        handleRemoveWork();
+                        removeTodo();
                         break;
                     case DISPLAY_WORK:
-                        handleDisplayWork();
+                        displayAllTodos();
                         break;
                     case KEYWORD_SEARCH:
-                        handleKeywordSearch();
+                        keywordSearch();
                         break;
                     case COMPLETE_WORK:
-                        handleCompleteWork();
+                        completeTodo();
                         break;
                     case EXIT:
                         running = false;
-                        outputView.showExit();
+                        outputView.displayProgramExit();
                         break;
                     default:
-                        outputView.showIncorrectInput();
+                        outputView.reportMessage(Messages.WRONG_INPUT_TRY_AGAIN);
                         break;
                 }
             } catch (InputValidationException e) {
-                outputView.showMessage(e.getMessage());
-            }
-        }
-    }
-
-    private void handleAddWork() {
-        try {
-            String description = inputView.getTodoDescription(); // 할 일 입력받음
-            String dueDate = inputView.getTodoDueDate();  // 마감일 입력을 받음(예외처리 포함)
-            Todo output = service.addTodo(description, dueDate);
-            outputView.reportCompleteAddingTodo(Optional.ofNullable(output));
-        } catch (InputValidationException e) {
-            outputView.showMessage(e.getMessage());
-        }
-    }
-
-    private void handleRemoveWork() {
-        try {
-            if (service.getAllTodos().get().isEmpty()) {
-                outputView.reportNoneRemovingTodo();
-            } else {
-                int deleteId = inputView.getTodoId(Actions.DELETE);
-                Optional<Todo> result = service.removeTodoById(deleteId);
-                outputView.reportResult(deleteId, result, Actions.DELETE);
-            }
-        } catch (InputValidationException e) {
-            outputView.showMessage(e.getMessage());
-        }
-    }
-
-    private void handleDisplayWork() {
-        try {
-            if (service.getAllTodos().get().isEmpty()) {
-                outputView.reportEmptyTodos();
-            } else {
-                String dDay = inputView.askDDay();
-                outputView.reportInputResult(dDay);
-                if (dDay.equals(Actions.CANCEL.toString())) return;
-                if (dDay.equals(Actions.ALL.getAction())) {
-                    outputView.displayAllTodos(service.getAllTodos());
-                } else {
-                    int dDayNum = Integer.parseInt(dDay);
-                    List<Todo> filteredAndSortedTodos = service.getFilterAndSortTodos(dDayNum);
-                    outputView.displayTodosWithinDueDate(filteredAndSortedTodos, dDayNum);
+                outputView.reportMessage(Messages.valueOf(e.getMessage()));  // 예외 메시지를 출력합니다.
+                if(e.getMessage().equals(Messages.CANCEL_RESTART.getMessage()) ){ // 입력 취소
+                    outputView.showRestartOption();
                 }
+            } catch (NoSuchElementException e) {
+                outputView.reportMessage(Messages.EMPTY_TODO_LIST);
+            } catch (IllegalArgumentException e) {
+                outputView.reportMessage(Messages.WRONG_INPUT_TRY_AGAIN);
             }
-        } catch (InputValidationException e) {
-            outputView.showMessage(e.getMessage());
         }
     }
 
-    private void handleKeywordSearch() {
-        try {
-            if (service.getAllTodos().get().isEmpty()) {
-                outputView.reportNoneTodo();
-            } else {
-                String keyword = inputView.askKeyword();
-                outputView.reportInputResult(keyword);
-                List<Todo> searchResult = service.searchTodosByKeyword(keyword);
-                outputView.displayTodosWithSearchWord(searchResult);
-            }
-        } catch (InputValidationException e) {
-            outputView.showMessage(e.getMessage());
+    private void addTodo() {
+        String description = inputView.getTodoDescription(); // 할 일 입력받음
+        String dueDate = inputView.getTodoDueDate();  // 마감일 입력을 받음(예외처리 포함)
+        Todo newTodo = service.addTodo(description, dueDate);
+        outputView.reportCompleteAddingTodo(Optional.ofNullable(newTodo));
+    }
+
+    private void removeTodo() {
+        int deleteId = inputView.getTodoId(Actions.DELETE);
+        service.removeTodoById(deleteId);
+    }
+
+    private void displayAllTodos() {
+        String dDay = inputView.askDDay(); // dDay 입력받음
+        outputView.reportInputValue(dDay);
+        if (dDay.equals(Actions.CANCEL.toString())) return;
+        if (dDay.equals(Actions.ALL.getAction())) {
+            outputView.displayAllTodos(service.getAllTodos());
+        } else {
+            int dDayNum = Integer.parseInt(dDay);
+            List<Todo> filteredAndSortedTodos = service.getFilterAndSortTodos(dDayNum);
+            outputView.displayTodosWithinDueDate(filteredAndSortedTodos, dDayNum);
         }
     }
 
-    private void handleCompleteWork() {
-        try {
-            Optional<Map<Integer, Todo>> optionalTodos = service.getAllTodos();
-            if (service.getAllTodos().get().isEmpty()) {
-                outputView.reportNoneTodo();
-            } else {
-                outputView.reportIncompleteTodo(optionalTodos);
-                int completeId = inputView.getTodoId(Actions.COMPLETE);
-                Optional<Todo> result = service.completeTodoById(completeId);
-                outputView.reportResult(completeId, result, Actions.COMPLETE);
-            }
-        } catch (InputValidationException e) {
-            outputView.showMessage(e.getMessage());
-        }
+    private void keywordSearch() {
+        String keyword = inputView.askKeyword();
+        outputView.reportInputValue(keyword);
+        List<Todo> searchResult = service.searchTodosByKeyword(keyword);
+        outputView.displayTodosWithSearchWord(searchResult);
+    }
+
+    private void completeTodo() {
+        int id = inputView.getTodoId(Actions.COMPLETE);
+        service.completeTodoById(id);
     }
 }
