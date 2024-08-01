@@ -11,11 +11,11 @@ public class TodoService {
         return repository.addTodoWithDueDate(description, dueDate);
     }
 
-    public Optional<Todo> removeTodoById(int id) {
-        return repository.removeTodoById(id);
+    public void removeTodoById(int id) {
+        repository.removeTodoById(id);
     }
-    public Todo getTodoById(int id) {
-        return repository.getAllTodos().get(id);
+    public Optional<Todo> getTodoById(int id) {
+        return Optional.ofNullable(repository.getAllTodos().get(id));
     }
 
     public Map<Integer, Todo> getAllTodos() {
@@ -30,7 +30,7 @@ public class TodoService {
         return repository.searchTodosByKeyword(keyword);
     }
 
-    public void completeTodoById(int id) {
-        repository.completeTodo(id);
+    public boolean completeTodoById(int id) {
+        return repository.completeTodo(id);
     }
 }

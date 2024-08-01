@@ -10,7 +10,7 @@ public class InputView {
         System.out.println("--------- SELECT OPTIONS -----------");
         System.out.println("옵션을 선택하세요: 1. 추가, 2. 단건삭제, 3. 조회, 4. 검색, 5. 완료처리, 6. 종료  [입력취소: -1]");
         System.out.print("숫자(1~6) 입력 >> ");
-        return inputValueHandler.optionValidate(scanner.nextLine(), 1, 6);
+        return inputValueHandler.optionValidate(scanner.nextLine());
     }
 
     public String getTodoDescription() {
@@ -18,8 +18,13 @@ public class InputView {
         return inputValueHandler.inputDescriptionValidate(scanner.nextLine());
     }
 
-    public int getTodoId(Actions action) {
-        System.out.print(action + "할 할 일의 ID를 입력하세요 >> ");
+    public int getTodoIdToDelete() {
+        System.out.print("삭제할 일의 ID를 입력하세요 >> ");
+        return inputValueHandler.idValidate(scanner.nextLine());
+    }
+
+    public int getTodoIdToComplete() {
+        System.out.print("완료할 일의 ID를 입력하세요 >> ");
         return inputValueHandler.idValidate(scanner.nextLine());
     }
 

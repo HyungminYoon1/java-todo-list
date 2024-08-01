@@ -5,15 +5,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class InputValueHandler {
-    public int optionValidate(String input, int min, int max) {
+    public int optionValidate(String input) {
         try {
-            int value = Integer.parseInt(input);
-            if (value == Options.INPUT_CANCEL.getNumber() || value >= min && value <= max){
-                return value;
-            }
-            throw new InputValidationException(Messages.WRONG_INPUT_TRY_AGAIN.getMessage());
+            return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            throw new InputValidationException(Messages.WRONG_INPUT_TRY_AGAIN.getMessage());
+            return Options.INCORRECT.getNumber();
         }
     }
 
@@ -36,14 +32,14 @@ public class InputValueHandler {
             throw new InputValidationException(Messages.CANCEL_RESTART.getMessage());
         }
         if (inputString.isBlank()) {
-            return Actions.NONE_DUE_DATE.getAction(); // 마감일 없음
+            return Messages.NONE_DUEDATE.getMessage(); // 마감일 없음
         }
         try {
             LocalDate.parse(inputString, DateTimeFormatter.ofPattern("yyyy-MM-dd")); // 문자열을 LocalDate로 변환 시도
+            return inputString;
         } catch (DateTimeParseException e) { // 잘못된 날짜 입력
-            throw new InputValidationException(Messages.WRONG_INPUT_TRY_AGAIN.getMessage());
+            throw new InputValidationException(Messages.WRONG_DATE_INPUT_TRY_AGAIN.getMessage());
         }
-        return inputString;
     }
 
     public String dDayValidate(String inputString) {
@@ -51,7 +47,7 @@ public class InputValueHandler {
             throw new InputValidationException(Messages.CANCEL_RESTART.getMessage());
         }
         if (inputString.isBlank()) {
-            return Actions.ALL.getAction();
+            return Messages.DISPLAY_ALL.getMessage();
         }
         try {
             if (Integer.parseInt(inputString) <= -2) {

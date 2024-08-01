@@ -41,8 +41,8 @@ public class Todo {
         return dueDate;
     }
 
-    public void completeTodo() {
-        this.isCompleted = true;
+    public void completeTodo(boolean complete) {
+        this.isCompleted = complete;
     }
 
 
@@ -55,7 +55,7 @@ public class Todo {
         return String.format("%-8d %-20s %-20s %-10s",
                 id,
                 description,
-                (isCompleted ? Actions.COMPLETE.getAction() : Actions.INCOMPLETE.getAction()),
+                (isCompleted ? "완료" : "미완료"),
                 dueDate);
     }
 }
